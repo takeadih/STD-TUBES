@@ -12,17 +12,17 @@ using namespace std;
 */
 
 typedef int infotype;
+typedef struct Node* adrNode;
 
 struct Node {
     infotype idAPBD;        // UNIQUE ID (key pengurutan)
     string namaProgram;
     string jenisBelanja;
     double anggaran;
-    Node* left;
-    Node* right;
+    adrNode left;
+    adrNode right;
 };
 
-typedef Node* adrNode;
 
 void createTree_APBD(adrNode &root);
 
