@@ -10,16 +10,14 @@ int main() {
 
     do {
         cout << "\n=== SISTEM PENGURUTAN APBD BERDASARKAN UNIQUE ID ===\n";
-        cout << "1. Tambah Program/Kegiatan APBD\n";
-        cout << "2. Cari Program APBD (Unique ID)\n";
-        cout << "3. Tampilkan APBD Terurut (Unique ID)\n";
+        cout << "1. Tambah Program/Kegiatan APBD\n\n";
+        cout << "2. Cari Program APBD \n";
+        cout << "3. Tampilkan APBD Terurut \n";
         cout << "4. Jumlah Program APBD\n";
         cout << "5. Total Anggaran APBD\n";
         cout << "6. Unique ID Terkecil\n";
         cout << "7. Unique ID Terbesar\n";
-        cout << "8. Info Sistem\n";
-        cout << "9. Input Data Contoh APBD (Simulasi)\n";
-        cout << "0. Keluar\n";
+        cout << "0. Keluar\n\n";
         cout << "Pilih: ";
         cin >> pilihan;
 
@@ -97,17 +95,6 @@ int main() {
                 if (root != nullptr)
                     cout << "Unique ID terbesar: "
                          << getMaxID_APBD(root) << endl;
-                break;
-
-            case 8:
-                cout << "Sistem ini mengurutkan data APBD\n";
-                cout << "berdasarkan UNIQUE ID (Kode Program APBD)\n";
-                cout << "menggunakan Binary Search Tree dan rekursi.\n";
-                break;
-
-            case 9:
-                loadSampleAPBD(root);
-                cout << "Data contoh APBD berhasil dimasukkan.\n";
                 break;
 
             case 0:
