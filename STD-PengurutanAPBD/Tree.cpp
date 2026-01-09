@@ -1,4 +1,5 @@
 #include "Tree.h"
+#include <cfloat>
 
 void createTree_APBD(adrNode &root) {
     root = nullptr;
@@ -6,29 +7,20 @@ void createTree_APBD(adrNode &root) {
 
 adrNode createNode_APBD(
     infotype id,
-    string prov,
-    string kabkota,
+    string kab,
     string nama,
-    string jenis,
     double anggaran
 ) {
     adrNode p = new Node;
     p->idAPBD = id;
-    p->provinsi = prov;
-    p->kabKota = kabkota;
+    p->kabupatenKota = kab;
     p->namaProgram = nama;
-    p->jenisBelanja = jenis;
     p->anggaran = anggaran;
     p->left = nullptr;
     p->right = nullptr;
     return p;
 }
 
-bool isUniqueID_APBD(adrNode root, infotype id) {
-    return searchNode_APBD(root, id) == nullptr;
-}
-
-/* Insert BST berdasarkan UNIQUE ID */
 void insertNode_APBD(adrNode &root, adrNode p) {
     if (root == nullptr) {
         root = p;
@@ -41,40 +33,38 @@ void insertNode_APBD(adrNode &root, adrNode p) {
 
 adrNode searchNode_APBD(adrNode root, infotype id) {
     if (root == nullptr) return nullptr;
-    if (id < root->idAPBD)
-        return searchNode_APBD(root->left, id);
-    else if (id > root->idAPBD)
-        return searchNode_APBD(root->right, id);
+    if (id < root->idAPBD) return searchNode_APBD(root->left, id);
+    if (id > root->idAPBD) return searchNode_APBD(root->right, id);
     return root;
 }
 
-/* Inorder = hasil pengurutan */
-void tampilUrutAPBD_Inorder(adrNode root) {
+// INORDER = hasil pengurutan UNIQUE ID
+void tampilInorder_APBD(adrNode root) {
     if (root != nullptr) {
-        tampilUrutAPBD_Inorder(root->left);
-        cout << "ID: " << root->idAPBD
-             << " | " << root->provinsi
-             << " - " << root->kabKota
-             << " | " << root->namaProgram
-             << " | " << root->jenisBelanja
-             << " | Rp " << root->anggaran << " M\n";
-        tampilUrutAPBD_Inorder(root->right);
+        tampilInorder_APBD(root->left);
+        cout << root->idAPBD << " | "
+             << root->kabupatenKota << " | "
+             << root->namaProgram << " | Rp "
+             << root->anggaran << " M\n";
+        tampilInorder_APBD(root->right);
     }
 }
 
-void tampilAPBD_Preorder(adrNode root) {
+void tampilPreorder_APBD(adrNode root) {
     if (root != nullptr) {
-        cout << root->idAPBD << " - " << root->namaProgram << endl;
-        tampilAPBD_Preorder(root->left);
-        tampilAPBD_Preorder(root->right);
+        cout << root->idAPBD << " | "
+             << root->namaProgram << endl;
+        tampilPreorder_APBD(root->left);
+        tampilPreorder_APBD(root->right);
     }
 }
 
-void tampilAPBD_Postorder(adrNode root) {
+void tampilPostorder_APBD(adrNode root) {
     if (root != nullptr) {
-        tampilAPBD_Postorder(root->left);
-        tampilAPBD_Postorder(root->right);
-        cout << root->idAPBD << " - " << root->namaProgram << endl;
+        tampilPostorder_APBD(root->left);
+        tampilPostorder_APBD(root->right);
+        cout << root->idAPBD << " | "
+             << root->namaProgram << endl;
     }
 }
 
@@ -91,18 +81,46 @@ double totalAnggaran_APBD(adrNode root) {
          + totalAnggaran_APBD(root->right);
 }
 
-infotype getMinID_APBD(adrNode root) {
-    adrNode p = root;
-    while (p->left != nullptr) {
-        p = p->left;
-    }
-    return p->idAPBD;
+// Cari anggaran minimum (traversal seluruh tree)
+double getMinAnggaran_APBD(adrNode root) {
+    if (root == nullptr) return DBL_MAX;
+
+    double kiri = getMinAnggaran_APBD(root->left);
+    double kanan = getMinAnggaran_APBD(root->right);
+
+    double minChild = (kiri < kanan) ? kiri : kanan;
+    return (root->anggaran < minChild) ? root->anggaran : minChild;
 }
 
-infotype getMaxID_APBD(adrNode root) {
-    adrNode p = root;
-    while (p->right != nullptr) {
-        p = p->right;
-    }
-    return p->idAPBD;
+// Cari anggaran maksimum
+double getMaxAnggaran_APBD(adrNode root) {
+    if (root == nullptr) return 0;
+
+    double kiri = getMaxAnggaran_APBD(root->left);
+    double kanan = getMaxAnggaran_APBD(root->right);
+
+    double maxChild = (kiri > kanan) ? kiri : kanan;
+    return (root->anggaran > maxChild) ? root->anggaran : maxChild;
+}
+
+void loadSampleAPBD(adrNode &root) {
+    insertNode_APBD(root,
+        createNode_APBD(412, "Kab. Bandung",
+        "Bantuan Sosial Masyarakat", 9600));
+
+    insertNode_APBD(root,
+        createNode_APBD(101, "Kab. Bandung",
+        "Pembangunan Jalan Kabupaten", 12500));
+
+    insertNode_APBD(root,
+        createNode_APBD(735, "Kota Jakarta Pusat",
+        "Digitalisasi Layanan Pemerintah", 3800));
+
+    insertNode_APBD(root,
+        createNode_APBD(205, "Kota Semarang",
+        "Peningkatan Sarana Pendidikan", 8200));
+
+    insertNode_APBD(root,
+        createNode_APBD(624, "Kota Makassar",
+        "Ketahanan Pangan Daerah", 7100));
 }
