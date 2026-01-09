@@ -7,17 +7,19 @@ int main() {
     createTree(root);
     loadSampleAPBD(root);
 
-    int pilihan;
+    int pilih;
     do {
         cout << "\n=== SISTEM HIRARKI APBD ===\n";
-        cout << "1. Tampilkan Struktur APBD\n";
-        cout << "2. Traversal Preorder\n";
-        cout << "3. Traversal Postorder\n";
+        cout << "1. Tampilkan Struktur Tree\n";
+        cout << "2. Preorder Traversal\n";
+        cout << "3. Postorder Traversal\n";
+        cout << "4. Anggaran Terkecil\n";
+        cout << "5. Anggaran Terbesar\n";
         cout << "0. Keluar\n";
         cout << "Pilih: ";
-        cin >> pilihan;
+        cin >> pilih;
 
-        switch (pilihan) {
+        switch (pilih) {
             case 1:
                 tampilTree(root);
                 break;
@@ -31,13 +33,16 @@ int main() {
                 postorder(root);
                 cout << endl;
                 break;
-            case 0:
-                cout << "Keluar dari sistem.\n";
+            case 4:
+                cout << "Anggaran terkecil: Rp "
+                     << getMinAnggaran(root) << " M\n";
                 break;
-            default:
-                cout << "Menu tidak tersedia.\n";
+            case 5:
+                cout << "Anggaran terbesar: Rp "
+                     << getMaxAnggaran(root) << " M\n";
+                break;
         }
-    } while (pilihan != 0);
+    } while (pilih != 0);
 
     return 0;
 }
