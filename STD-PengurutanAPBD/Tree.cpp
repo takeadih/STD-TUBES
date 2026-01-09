@@ -1,11 +1,10 @@
 #include "Tree.h"
+#include <cfloat>
 
-// Inisialisasi tree
 void createTree(adrNode &root) {
     root = nullptr;
 }
 
-// Membuat node
 adrNode createNode(int id, string nama, double anggaran) {
     adrNode p = new Node;
     p->id = id;
@@ -16,7 +15,6 @@ adrNode createNode(int id, string nama, double anggaran) {
     return p;
 }
 
-// Menambahkan child ke parent
 void addChild(adrNode parent, adrNode child) {
     if (parent->firstChild == nullptr) {
         parent->firstChild = child;
@@ -29,7 +27,7 @@ void addChild(adrNode parent, adrNode child) {
     }
 }
 
-// Menampilkan struktur tree (visualisasi)
+// Visualisasi tree
 void tampilTree(adrNode root, int level) {
     if (root != nullptr) {
         for (int i = 0; i < level; i++) cout << "  ";
@@ -45,7 +43,7 @@ void tampilTree(adrNode root, int level) {
     }
 }
 
-// Preorder traversal
+// Preorder
 void preorder(adrNode root) {
     if (root != nullptr) {
         cout << root->id << " ";
@@ -54,7 +52,7 @@ void preorder(adrNode root) {
     }
 }
 
-// Postorder traversal
+// Postorder
 void postorder(adrNode root) {
     if (root != nullptr) {
         postorder(root->firstChild);
@@ -63,19 +61,48 @@ void postorder(adrNode root) {
     }
 }
 
-// Data APBD diinisialisasi
+// Cari anggaran terkecil (hanya node 30x)
+double getMinAnggaran(adrNode root) {
+    if (root == nullptr) return DBL_MAX;
+
+    double minChild = getMinAnggaran(root->firstChild);
+    double minSibling = getMinAnggaran(root->nextSibling);
+
+    double minValue = (minChild < minSibling) ? minChild : minSibling;
+
+    if (root->id >= 300 && root->id < 400) {
+        return (root->anggaran < minValue) ? root->anggaran : minValue;
+    }
+    return minValue;
+}
+
+// Cari anggaran terbesar
+double getMaxAnggaran(adrNode root) {
+    if (root == nullptr) return 0;
+
+    double maxChild = getMaxAnggaran(root->firstChild);
+    double maxSibling = getMaxAnggaran(root->nextSibling);
+
+    double maxValue = (maxChild > maxSibling) ? maxChild : maxSibling;
+
+    if (root->id >= 300 && root->id < 400) {
+        return (root->anggaran > maxValue) ? root->anggaran : maxValue;
+    }
+    return maxValue;
+}
+
+// Inisialisasi data APBD
 void loadSampleAPBD(adrNode &root) {
-    // Provinsi
+
+    // ===== PROVINSI 1 =====
     root = createNode(1, "Provinsi Jawa Barat");
 
-    // Kabupaten/Kota
     adrNode kabBandung = createNode(101, "Kabupaten Bandung");
     adrNode kabBekasi  = createNode(102, "Kabupaten Bekasi");
 
     addChild(root, kabBandung);
     addChild(root, kabBekasi);
 
-    // Program APBD (20x)
     adrNode progJalan = createNode(201, "Pembangunan Jalan Kabupaten");
     adrNode progBansos = createNode(202, "Bantuan Sosial Masyarakat");
     adrNode progSekolah = createNode(203, "Peningkatan Sarana Pendidikan");
@@ -84,12 +111,19 @@ void loadSampleAPBD(adrNode &root) {
     addChild(kabBandung, progBansos);
     addChild(kabBekasi, progSekolah);
 
-    // Anggaran (30x)
-    adrNode anggaran1 = createNode(301, "Anggaran Tahun 2025", 12500);
-    adrNode anggaran2 = createNode(302, "Anggaran Tahun 2025", 9600);
-    adrNode anggaran3 = createNode(303, "Anggaran Tahun 2025", 8200);
+    addChild(progJalan, createNode(301, "Anggaran 2025", 12500));
+    addChild(progBansos, createNode(302, "Anggaran 2025", 9600));
+    addChild(progSekolah, createNode(303, "Anggaran 2025", 8200));
 
-    addChild(progJalan, anggaran1);
-    addChild(progBansos, anggaran2);
-    addChild(progSekolah, anggaran3);
+    // ===== PROVINSI 2 =====
+    adrNode provJateng = createNode(2, "Provinsi Jawa Tengah");
+    addChild(root, provJateng);
+
+    adrNode kabSemarang = createNode(103, "Kota Semarang");
+    addChild(provJateng, kabSemarang);
+
+    adrNode progKesehatan = createNode(204, "Peningkatan Layanan Kesehatan");
+    addChild(kabSemarang, progKesehatan);
+
+    addChild(progKesehatan, createNode(304, "Anggaran 2025", 14500));
 }
