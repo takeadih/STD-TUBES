@@ -6,45 +6,35 @@
 using namespace std;
 
 /*
-    Pengurutan APBD menggunakan Binary Search Tree
-    berdasarkan UNIQUE ID Program/Kegiatan APBD
+    Tree Hirarki APBD
+    Struktur:
+    Provinsi (x)
+      └─ Kabupaten/Kota (10x)
+          └─ Program APBD (20x)
+              └─ Anggaran (30x)
 */
 
-typedef int infotype;
-typedef struct Node* adrNode;
-
 struct Node {
-    infotype idAPBD;          // UNIQUE ID (key BST)
-    string kabupatenKota;
-    string namaProgram;
-    double anggaran;          // juta rupiah
-    adrNode left;
-    adrNode right;
+    int id;                 // UNIQUE ID sesuai level
+    string nama;            // Nama provinsi / kabupaten / program / anggaran
+    double anggaran;        // Hanya di level anggaran
+    Node* firstChild;
+    Node* nextSibling;
 };
 
+typedef Node* adrNode;
+
 // Inisialisasi
-void createTree_APBD(adrNode &root);
-adrNode createNode_APBD(
-    infotype id,
-    string kab,
-    string nama,
-    double anggaran
-);
+void createTree(adrNode &root);
+adrNode createNode(int id, string nama, double anggaran = 0);
 
-// Operasi BST
-void insertNode_APBD(adrNode &root, adrNode p);
-adrNode searchNode_APBD(adrNode root, infotype id);
+// Operasi Tree
+void addChild(adrNode parent, adrNode child);
 
-// Traversal
-void tampilInorder_APBD(adrNode root);
-void tampilPreorder_APBD(adrNode root);
-void tampilPostorder_APBD(adrNode root);
-
-// Informasi APBD
-int countProgram_APBD(adrNode root);
-double totalAnggaran_APBD(adrNode root);
-double getMinAnggaran_APBD(adrNode root);
-double getMaxAnggaran_APBD(adrNode root);
+// Traversal & visualisasi
+void tampilTree(adrNode root, int level = 0);
+void preorder(adrNode root);
+void postorder(adrNode root);
 
 // Data awal
 void loadSampleAPBD(adrNode &root);
