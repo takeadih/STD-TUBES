@@ -1,10 +1,11 @@
 #include "Tree.h"
-#include <cfloat>
 
+// Membuat tree kosong
 void createTree(adrNode &root) {
     root = nullptr;
 }
 
+// Membuat node baru
 adrNode createNode(int id, string nama, double anggaran) {
     adrNode p = new Node;
     p->id = id;
@@ -15,7 +16,7 @@ adrNode createNode(int id, string nama, double anggaran) {
     return p;
 }
 
-// Tambah child sebagai sibling terakhir
+// Menambahkan child ke parent (hirarki)
 void addChild(adrNode parent, adrNode child) {
     if (parent->firstChild == nullptr) {
         parent->firstChild = child;
@@ -37,6 +38,15 @@ void preorder(adrNode root) {
     }
 }
 
+// Inorder traversal (LCRS)
+void inorder(adrNode root) {
+    if (root != nullptr) {
+        inorder(root->firstChild);
+        cout << root->id << " ";
+        inorder(root->nextSibling);
+    }
+}
+
 // Postorder traversal
 void postorder(adrNode root) {
     if (root != nullptr) {
@@ -46,11 +56,11 @@ void postorder(adrNode root) {
     }
 }
 
-// Visualisasi tree
+// Visualisasi struktur tree
 void tampilTree(adrNode root, int level) {
     if (root != nullptr) {
         for (int i = 0; i < level; i++) cout << "  ";
-        cout << "[" << root->id << "] " << root->nama;
+        cout << "- [" << root->id << "] " << root->nama;
         if (root->anggaran > 0)
             cout << " | Rp " << root->anggaran << " M";
         cout << endl;
@@ -60,24 +70,34 @@ void tampilTree(adrNode root, int level) {
     }
 }
 
-// Anggaran minimum
+// Mencari anggaran terkecil
 double getMinAnggaran(adrNode root) {
-    if (root == nullptr) return DBL_MAX;
+    if (root == nullptr) return -1;
 
-    double minVal = (root->anggaran > 0) ? root->anggaran : DBL_MAX;
-    minVal = min(minVal, getMinAnggaran(root->firstChild));
-    minVal = min(minVal, getMinAnggaran(root->nextSibling));
+    double minVal = (root->anggaran > 0) ? root->anggaran : -1;
+
+    double childMin = getMinAnggaran(root->firstChild);
+    double siblingMin = getMinAnggaran(root->nextSibling);
+
+    if (childMin > 0 && (minVal < 0 || childMin < minVal))
+        minVal = childMin;
+    if (siblingMin > 0 && (minVal < 0 || siblingMin < minVal))
+        minVal = siblingMin;
 
     return minVal;
 }
 
-// Anggaran maksimum
+// Mencari anggaran terbesar
 double getMaxAnggaran(adrNode root) {
     if (root == nullptr) return 0;
 
     double maxVal = root->anggaran;
-    maxVal = max(maxVal, getMaxAnggaran(root->firstChild));
-    maxVal = max(maxVal, getMaxAnggaran(root->nextSibling));
+
+    double childMax = getMaxAnggaran(root->firstChild);
+    double siblingMax = getMaxAnggaran(root->nextSibling);
+
+    if (childMax > maxVal) maxVal = childMax;
+    if (siblingMax > maxVal) maxVal = siblingMax;
 
     return maxVal;
 }
@@ -86,27 +106,17 @@ double getMaxAnggaran(adrNode root) {
 void loadSampleAPBD(adrNode &root) {
     root = createNode(1, "Provinsi Jawa Barat");
 
-    adrNode kab = createNode(101, "Kategori Kabupaten");
-    adrNode kota = createNode(102, "Kategori Kota");
+    // Kabupaten (ID lebih kecil)
+    adrNode kabBandung = createNode(101, "Kabupaten Bandung");
+    adrNode anggaranKab = createNode(301, "Anggaran Kabupaten Bandung", 12500);
 
-    addChild(root, kab);
-    addChild(root, kota);
+    // Kota (ID lebih besar)
+    adrNode kotaBekasi = createNode(102, "Kota Bekasi");
+    adrNode anggaranKota = createNode(302, "Anggaran Kota Bekasi", 9800);
 
-    adrNode kabBandung = createNode(201, "Kabupaten Bandung");
-    adrNode kabBekasi  = createNode(202, "Kabupaten Bekasi");
+    addChild(root, kabBandung);
+    addChild(kabBandung, anggaranKab);
 
-    addChild(kab, kabBandung);
-    addChild(kab, kabBekasi);
-
-    addChild(kabBandung, createNode(301, "Anggaran APBD", 12500));
-    addChild(kabBekasi,  createNode(302, "Anggaran APBD", 9800));
-
-    adrNode kotaBandung = createNode(203, "Kota Bandung");
-    adrNode kotaDepok   = createNode(204, "Kota Depok");
-
-    addChild(kota, kotaBandung);
-    addChild(kota, kotaDepok);
-
-    addChild(kotaBandung, createNode(303, "Anggaran APBD", 11000));
-    addChild(kotaDepok,   createNode(304, "Anggaran APBD", 8700));
+    addChild(root, kotaBekasi);
+    addChild(kotaBekasi, anggaranKota);
 }
