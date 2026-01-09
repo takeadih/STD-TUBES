@@ -16,8 +16,8 @@ using namespace std;
 
 struct Node {
     int id;                 // UNIQUE ID sesuai level
-    string nama;            // Nama provinsi / kabupaten / program / anggaran
-    double anggaran;        // Hanya di level anggaran
+    string nama;            // Nama entitas
+    double anggaran;        // Hanya terisi di level anggaran (30x)
     Node* firstChild;
     Node* nextSibling;
 };
@@ -28,13 +28,17 @@ typedef Node* adrNode;
 void createTree(adrNode &root);
 adrNode createNode(int id, string nama, double anggaran = 0);
 
-// Operasi Tree
+// Operasi tree
 void addChild(adrNode parent, adrNode child);
 
 // Traversal & visualisasi
 void tampilTree(adrNode root, int level = 0);
 void preorder(adrNode root);
 void postorder(adrNode root);
+
+// Fitur anggaran
+double getMinAnggaran(adrNode root);
+double getMaxAnggaran(adrNode root);
 
 // Data awal
 void loadSampleAPBD(adrNode &root);
