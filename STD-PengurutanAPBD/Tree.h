@@ -6,28 +6,26 @@
 using namespace std;
 
 /*
- Tree Hirarki APBD (3 Level)
- Provinsi
- ├─ Kabupaten
- │   ├─ Nama Kabupaten
- │   │   └─ Anggaran
- └─ Kota
-     ├─ Nama Kota
-     │   └─ Anggaran
+    Tree Hirarki APBD (General Tree)
+    Representasi: Left-Child Right-Sibling (LCRS)
+
+    Level:
+    - Provinsi        : x
+    - Kabupaten/Kota  : 10x (kabupaten < kota)
+    - Anggaran        : 30x
 */
 
 struct Node {
     int id;                 // UNIQUE ID
-    string nama;            // Nama wilayah / anggaran
-    double anggaran;        // Khusus node anggaran
-
-    Node* firstChild;       // Anak pertama
-    Node* nextSibling;      // Saudara berikutnya
+    string nama;            // Nama provinsi / kabupaten / kota
+    double anggaran;        // Hanya terisi di level anggaran
+    Node* firstChild;
+    Node* nextSibling;
 };
 
 typedef Node* adrNode;
 
-// Dasar
+// Inisialisasi
 void createTree(adrNode &root);
 adrNode createNode(int id, string nama, double anggaran = 0);
 
@@ -36,12 +34,13 @@ void addChild(adrNode parent, adrNode child);
 
 // Traversal
 void preorder(adrNode root);
+void inorder(adrNode root);     // berbasis LCRS
 void postorder(adrNode root);
 
 // Visualisasi
 void tampilTree(adrNode root, int level = 0);
 
-// Anggaran
+// Analisis anggaran
 double getMinAnggaran(adrNode root);
 double getMaxAnggaran(adrNode root);
 
