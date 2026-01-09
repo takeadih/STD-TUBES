@@ -6,50 +6,47 @@
 using namespace std;
 
 /*
-    Sistem ini mengurutkan data APBD
-    berdasarkan UNIQUE ID (Kode Program/Kegiatan APBD)
-    menggunakan Binary Search Tree dan rekursi.
+    Pengurutan APBD menggunakan Binary Search Tree
+    berdasarkan UNIQUE ID Program/Kegiatan APBD
 */
 
 typedef int infotype;
 typedef struct Node* adrNode;
 
 struct Node {
-    infotype idAPBD;            // UNIQUE ID (key BST)
-    string provinsi;
-    string kabKota;
+    infotype idAPBD;          // UNIQUE ID (key BST)
+    string kabupatenKota;
     string namaProgram;
-    string jenisBelanja;
-    double anggaran;
-
+    double anggaran;          // juta rupiah
     adrNode left;
     adrNode right;
 };
 
-/* Operasi dasar BST */
+// Inisialisasi
 void createTree_APBD(adrNode &root);
 adrNode createNode_APBD(
     infotype id,
-    string prov,
-    string kabkota,
+    string kab,
     string nama,
-    string jenis,
     double anggaran
 );
 
-bool isUniqueID_APBD(adrNode root, infotype id);
+// Operasi BST
 void insertNode_APBD(adrNode &root, adrNode p);
 adrNode searchNode_APBD(adrNode root, infotype id);
 
-/* Traversal */
-void tampilUrutAPBD_Inorder(adrNode root);   // hasil pengurutan
-void tampilAPBD_Preorder(adrNode root);
-void tampilAPBD_Postorder(adrNode root);
+// Traversal
+void tampilInorder_APBD(adrNode root);
+void tampilPreorder_APBD(adrNode root);
+void tampilPostorder_APBD(adrNode root);
 
-/* Fitur tambahan */
+// Informasi APBD
 int countProgram_APBD(adrNode root);
 double totalAnggaran_APBD(adrNode root);
-infotype getMinID_APBD(adrNode root);
-infotype getMaxID_APBD(adrNode root);
+double getMinAnggaran_APBD(adrNode root);
+double getMaxAnggaran_APBD(adrNode root);
+
+// Data awal
+void loadSampleAPBD(adrNode &root);
 
 #endif
